@@ -9,9 +9,14 @@ const dbConfig = config[env];
  * Uses DATABASE_URL in production, otherwise uses config object
  */
 let sequelize;
-if (dbConfig.use_env_variable) {
+if (dbConfig.use_env_variable && process.env[dbConfig.use_env_variable]) {
+    // Production: use DATABASE_URL from Railway
     sequelize = new Sequelize(process.env[dbConfig.use_env_variable], dbConfig);
+} else if (dbConfig.dialect === 'sqlite') {
+    // Development: use SQLite
+    sequelize = new Sequelize(dbConfig);
 } else {
+    // Fallback: use individual config values
     sequelize = new Sequelize(
         dbConfig.database,
         dbConfig.username,
