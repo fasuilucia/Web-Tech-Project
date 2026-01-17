@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { eventGroupsAPI } from '../../services/api';
-import { formatDate } from '../../utils/dateHelpers';
 import { useAuth } from '../../context/AuthContext';
 
 /**

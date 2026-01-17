@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { eventGroupsAPI, eventsAPI, attendanceAPI } from '../../services/api';
-import { formatDate, formatForInput } from '../../utils/dateHelpers';
+import { formatDate } from '../../utils/dateHelpers';
 
 /**
  * Event Group Details Component
@@ -9,7 +9,6 @@ import { formatDate, formatForInput } from '../../utils/dateHelpers';
  */
 const EventGroupDetails = () => {
     const { id } = useParams();
-    const navigate = useNavigate();
     const [group, setGroup] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -20,11 +19,7 @@ const EventGroupDetails = () => {
         duration: 60,
     });
 
-    useEffect(() => {
-        fetchGroupDetails();
-    }, [id]);
-
-    const fetchGroupDetails = async () => {
+    const fetchGroupDetails = useCallback(async () => {
         try {
             const response = await eventGroupsAPI.getById(id);
             setGroup(response.data.data);
@@ -33,7 +28,11 @@ const EventGroupDetails = () => {
             setError('Failed to load event group');
             setLoading(false);
         }
-    };
+    }, [id]);
+
+    useEffect(() => {
+        fetchGroupDetails();
+    }, [fetchGroupDetails]);
 
     const handleCreateEvent = async (e) => {
         e.preventDefault();

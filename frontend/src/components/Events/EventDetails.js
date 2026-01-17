@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { eventsAPI, attendanceAPI } from '../../services/api';
 import { formatDate, formatRelativeTime } from '../../utils/dateHelpers';
@@ -15,16 +15,7 @@ const EventDetails = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    useEffect(() => {
-        fetchEventDetails();
-        fetchAttendees();
-
-        // Refresh attendees every 10 seconds
-        const interval = setInterval(fetchAttendees, 10000);
-        return () => clearInterval(interval);
-    }, [id]);
-
-    const fetchEventDetails = async () => {
+    const fetchEventDetails = useCallback(async () => {
         try {
             const response = await eventsAPI.getById(id);
             setEvent(response.data.data);
@@ -33,16 +24,25 @@ const EventDetails = () => {
             setError('Failed to load event');
             setLoading(false);
         }
-    };
+    }, [id]);
 
-    const fetchAttendees = async () => {
+    const fetchAttendees = useCallback(async () => {
         try {
             const response = await eventsAPI.getAttendees(id);
             setAttendees(response.data.data.attendees);
         } catch (err) {
             console.error('Failed to load attendees');
         }
-    };
+    }, [id]);
+
+    useEffect(() => {
+        fetchEventDetails();
+        fetchAttendees();
+
+        // Refresh attendees every 10 seconds
+        const interval = setInterval(fetchAttendees, 10000);
+        return () => clearInterval(interval);
+    }, [fetchEventDetails, fetchAttendees]);
 
     const handleExport = async (format) => {
         try {
