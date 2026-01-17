@@ -92,11 +92,10 @@ const startServer = async () => {
             console.log(`✓ Environment: ${process.env.NODE_ENV || 'development'}`);
             console.log(`✓ Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`);
         });
-    });
-} catch (error) {
-    console.error('Failed to start server:', error);
-    process.exit(1);
-}
+    } catch (error) {
+        console.error('Failed to start server:', error);
+        process.exit(1);
+    }
 };
 
 // Handle graceful shutdown
