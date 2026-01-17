@@ -99,9 +99,9 @@ const startServer = async () => {
         eventStateManager.start();
         console.log('✓ Event state manager started');
 
-        // Start Express server - bind to 0.0.0.0 for Railway
-        app.listen(PORT, HOST, () => {
-            console.log(`✓ Server running on ${HOST}:${PORT}`);
+        // Start Express server
+        app.listen(Number(PORT), () => {
+            console.log(`✓ Server running on port ${PORT}`);
             console.log(`✓ Environment: ${process.env.NODE_ENV || 'development'}`);
             console.log(`✓ Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`);
         });
