@@ -38,7 +38,20 @@ app.get('/health', (req, res) => {
     });
 });
 
+// Root route for platform health checks
+app.get('/', (req, res) => {
+    res.status(200).send('Attendance Monitoring API is online');
+});
+
 // API Routes
+app.use((req, res, next) => {
+    const origin = req.get('origin');
+    if (origin) {
+        console.log(`Incoming request from origin: ${origin}`);
+    }
+    next();
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/event-groups', eventGroupRoutes);
 app.use('/api/events', eventRoutes);
