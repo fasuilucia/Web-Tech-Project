@@ -13,9 +13,25 @@ const attendanceRoutes = require('./routes/attendance');
 // Initialize Express app
 const app = express();
 
-// Middleware
+// Middleware - CORS configuration for multiple Vercel URLs
+const allowedOrigins = [
+    process.env.FRONTEND_URL || 'http://localhost:3000',
+    'https://web-tech-project-six.vercel.app',
+    'https://web-tech-project-git-main-fasui-lucias-projects.vercel.app'
+];
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+
+        // Check if origin is in allowed list or matches Vercel preview pattern
+        if (allowedOrigins.includes(origin) || origin.includes('vercel.app')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
