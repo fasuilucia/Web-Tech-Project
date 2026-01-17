@@ -2,6 +2,11 @@
 
 A full-stack web application for monitoring event attendance using QR codes and access codes.
 
+## 🌐 Live Demo
+
+- **Frontend**: https://web-tech-project-six.vercel.app
+- **Backend API**: https://web-tech-project-production.up.railway.app/api
+
 ## 📋 Overview
 
 This application allows event organizers to create and manage events, generate QR codes for attendance tracking, and monitor participant attendance in real-time. Participants can confirm their attendance by scanning QR codes or entering access codes manually.
